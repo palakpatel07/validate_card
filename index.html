@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Validate credit and debit card numbers using the Luhn algorithm. Free online card number format checker.">
+    <title>Card Validator - Luhn Algorithm Checker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main class="container">
+        <header class="header">
+            <h1 class="header__title">Card Validator</h1>
+            <p class="header__subtitle">Validate card numbers using the Luhn algorithm</p>
+        </header>
+
+        <section class="card-form" aria-labelledby="form-heading">
+            <h2 id="form-heading" class="visually-hidden">Card Validation Form</h2>
+
+            <form id="validation-form" class="form" novalidate>
+                <div class="form__group">
+                    <label for="card-number" class="form__label">Card Number</label>
+                    <input
+                        type="text"
+                        id="card-number"
+                        name="card-number"
+                        class="form__input"
+                        placeholder="1234 5678 9012 3456"
+                        inputmode="numeric"
+                        autocomplete="cc-number"
+                        maxlength="23"
+                        aria-describedby="card-hint"
+                        required
+                    >
+                    <span id="card-hint" class="form__hint">Enter a 13-19 digit card number</span>
+                </div>
+
+                <div class="form__actions">
+                    <button type="submit" class="btn btn--primary" id="validate-btn">
+                        <span class="btn__text">Validate</span>
+                        <svg class="btn__icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </button>
+                    <button type="button" class="btn btn--secondary" id="clear-btn">
+                        <span class="btn__text">Clear</span>
+                        <svg class="btn__icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+
+            <div id="result" class="result" role="alert" aria-live="polite" hidden>
+                <div class="result__icon" aria-hidden="true"></div>
+                <p class="result__message"></p>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p class="footer__disclaimer">
+                <strong>Disclaimer:</strong> This tool validates card number format using the Luhn algorithm only.
+                It does not verify if a card is active, has available funds, or belongs to any specific individual.
+                No card data is stored or transmitted.
+            </p>
+        </footer>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

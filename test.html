@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Validator - Tests</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 { color: #333; margin-bottom: 20px; }
+        .test-section { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .test-section h2 { margin-top: 0; color: #555; font-size: 18px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .test { padding: 8px 0; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 10px; }
+        .test:last-child { border-bottom: none; }
+        .pass { color: #10b981; }
+        .fail { color: #ef4444; }
+        .test-card { font-family: monospace; background: #f5f5f5; padding: 2px 6px; border-radius: 4px; }
+        .summary { font-size: 18px; font-weight: bold; margin-top: 20px; padding: 15px; border-radius: 8px; }
+        .summary.all-pass { background: #d1fae5; color: #059669; }
+        .summary.has-fail { background: #fee2e2; color: #dc2626; }
+    </style>
+</head>
+<body>
+    <h1>Card Validator - Test Suite</h1>
+    <div id="results"></div>
+    <div id="summary"></div>
+
+    <script>
+        // Copy of the Luhn validation function for testing
+        function luhnValidate(cardNumber) {
+            const digits = cardNumber.replace(/\D/g, '').split('').map(Number);
+            let sum = 0;
+
+            for (let i = digits.length - 1; i >= 0; i--) {
+                let digit = digits[i];
+                const isSecondFromRight = (digits.length - 1 - i) % 2 === 1;
+
+                if (isSecondFromRight) {
+                    digit *= 2;
+                    if (digit > 9) {
+                        digit -= 9;
+                    }
+                }
+
+                sum += digit;
+            }
+
+            return sum % 10 === 0;
+        }
+
+        // Test cases
+        const testCases = {
+            'Valid Card Numbers': [
+                { card: '4532015112830366', expected: true, description: 'Visa test card' },
+                { card: '5425233430109903', expected: true, description: 'Mastercard test card' },
+                { card: '378282246310005', expected: true, description: 'American Express test card' },
+                { card: '6011111111111117', expected: true, description: 'Discover test card' },
+                { card: '4111111111111111', expected: true, description: 'Common Visa test card' },
+                { card: '5500000000000004', expected: true, description: 'Common Mastercard test card' },
+            ],
+            'Invalid Card Numbers': [
+                { card: '4532015112830367', expected: false, description: 'Last digit changed' },
+                { card: '1234567890123456', expected: false, description: 'Random number' },
+                { card: '1111111111111111', expected: false, description: 'All ones (fails Luhn)' },
+                { card: '9999999999999999', expected: false, description: 'All nines' },
+            ],
+            'Edge Cases': [
+                { card: '0000000000000000', expected: true, description: 'All zeros (actually passes Luhn!)' },
+                { card: '4532 0151 1283 0366', expected: true, description: 'With spaces' },
+                { card: '4532-0151-1283-0366', expected: true, description: 'With dashes' },
+            ]
+        };
+
+        // Run tests
+        let totalTests = 0;
+        let passedTests = 0;
+        let resultsHTML = '';
+
+        for (const [section, tests] of Object.entries(testCases)) {
+            resultsHTML += `<div class="test-section"><h2>${section}</h2>`;
+
+            for (const test of tests) {
+                totalTests++;
+                const result = luhnValidate(test.card);
+                const passed = result === test.expected;
+                if (passed) passedTests++;
+
+                const icon = passed ? '&#10004;' : '&#10008;';
+                const statusClass = passed ? 'pass' : 'fail';
+
+                resultsHTML += `
+                    <div class="test">
+                        <span class="${statusClass}">${icon}</span>
+                        <span class="test-card">${test.card}</span>
+                        <span>${test.description}</span>
+                        <span class="${statusClass}">(Expected: ${test.expected}, Got: ${result})</span>
+                    </div>
+                `;
+            }
+
+            resultsHTML += '</div>';
+        }
+
+        document.getElementById('results').innerHTML = resultsHTML;
+
+        // Summary
+        const allPassed = passedTests === totalTests;
+        const summaryClass = allPassed ? 'all-pass' : 'has-fail';
+        document.getElementById('summary').innerHTML = `
+            <div class="summary ${summaryClass}">
+                ${allPassed ? '&#10004;' : '&#10008;'} ${passedTests}/${totalTests} tests passed
+            </div>
+        `;
+    </script>
+</body>
+</html>
