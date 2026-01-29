@@ -26,9 +26,9 @@
     const MAX_CARD_LENGTH = 19;
 
     /**
-     * Validates a card number using the Luhn algorithm
-     * @param {string} cardNumber - The card number to validate (digits only)
-     * @returns {boolean} - True if the card number is valid
+     * Determine whether a numeric card number satisfies the Luhn checksum.
+     * @param {string} cardNumber - The card number to validate; must contain digits only.
+     * @returns {boolean} `true` if the digits satisfy the Luhn checksum, `false` otherwise.
      */
     function luhnValidate(cardNumber) {
         const digits = cardNumber.split('').map(Number);
@@ -52,9 +52,10 @@
     }
 
     /**
-     * Formats a card number with spaces every 4 digits
-     * @param {string} value - The raw input value
-     * @returns {string} - Formatted card number
+     * Format a card number by inserting a space every four digits.
+     * Non-digit characters are removed before grouping.
+     * @param {string} value - Raw input that may include digits, spaces, or other characters.
+     * @returns {string} The card number grouped in blocks of four digits separated by single spaces, or an empty string if no digits are present.
      */
     function formatCardNumber(value) {
         const digitsOnly = value.replace(/\D/g, '');
@@ -63,18 +64,21 @@
     }
 
     /**
-     * Extracts digits only from a string
-     * @param {string} value - The input value
-     * @returns {string} - Digits only
+     * Return a string containing only the digits from the given input.
+     * @param {string} value - Input text to extract digits from.
+     * @returns {string} A string composed of the numeric digits found in `value`.
      */
     function getDigitsOnly(value) {
         return value.replace(/\D/g, '');
     }
 
     /**
-     * Validates card number and returns validation result
-     * @param {string} cardNumber - The card number to validate
-     * @returns {{valid: boolean, message: string}} - Validation result
+     * Validate a card number string for length and the Luhn checksum.
+     *
+     * Accepts any string; non-digit characters (spaces, dashes, etc.) are ignored before validation.
+     *
+     * @param {string} cardNumber - The card number to validate (may include spaces or separators).
+     * @returns {{valid: boolean, message: string}} Validation result where `valid` is `true` if the numeric digit count is within MIN_CARD_LENGTH and MAX_CARD_LENGTH and the number passes the Luhn check, otherwise `false`. `message` explains the validation outcome.
      */
     function validateCard(cardNumber) {
         const digits = getDigitsOnly(cardNumber);
@@ -118,8 +122,10 @@
     }
 
     /**
-     * Displays the validation result
-     * @param {{valid: boolean, message: string}} result - The validation result
+     * Show the card validation result in the UI.
+     *
+     * Reveals the result container, applies success or error styling, updates the visible message and icon, and sets the region's ARIA live attribute to "assertive" for screen readers.
+     * @param {{valid: boolean, message: string}} result - Object where `valid` indicates validation success and `message` is the text to display to the user.
      */
     function displayResult(result) {
         resultContainer.hidden = false;
@@ -155,7 +161,9 @@
     }
 
     /**
-     * Resets the form to its initial state
+     * Restore the card input UI to its initial, empty state.
+     *
+     * Clears the card input value, hides any visible validation result, and focuses the input.
      */
     function resetForm() {
         cardInput.value = '';
