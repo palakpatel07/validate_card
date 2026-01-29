@@ -6,8 +6,20 @@
     const cardInput = document.getElementById('card-number');
     const clearBtn = document.getElementById('clear-btn');
     const resultContainer = document.getElementById('result');
+
+    // Validate required DOM elements exist
+    if (!form || !cardInput || !clearBtn || !resultContainer) {
+        console.error('Required DOM elements not found');
+        return;
+    }
+
     const resultIcon = resultContainer.querySelector('.result__icon');
     const resultMessage = resultContainer.querySelector('.result__message');
+
+    if (!resultIcon || !resultMessage) {
+        console.error('Result container child elements not found');
+        return;
+    }
 
     // Constants
     const MIN_CARD_LENGTH = 13;
@@ -132,8 +144,6 @@
             `;
         }
 
-        // Announce to screen readers
-        resultContainer.setAttribute('aria-live', 'assertive');
     }
 
     /**

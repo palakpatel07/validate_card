@@ -73,6 +73,12 @@
                 { card: '0000000000000000', expected: true, description: 'All zeros (actually passes Luhn!)' },
                 { card: '4532 0151 1283 0366', expected: true, description: 'With spaces' },
                 { card: '4532-0151-1283-0366', expected: true, description: 'With dashes' },
+            ],
+            'Input Handling (Luhn only - app validates length separately)': [
+                { card: '', expected: true, description: 'Empty string (Luhn passes, app rejects via length check)' },
+                { card: 'abcd1234567890123456', expected: false, description: 'Non-numeric characters stripped' },
+                { card: '41111111111111114111', expected: false, description: 'Too long (20 digits) - fails Luhn' },
+                { card: '123', expected: false, description: 'Too short - fails Luhn' },
             ]
         };
 
